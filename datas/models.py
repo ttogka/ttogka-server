@@ -10,7 +10,7 @@ class CustomAutoField(models.AutoField):
 class Card(models.Model):
     id = CustomAutoField(primary_key=True)
 
-    card = models.CharField(verbose_name='카드명', null=True, blank=True, max_length=20)
+    card = models.CharField(verbose_name='카드명', null=True, blank=True, max_length=30)
     brand = models.CharField(verbose_name='회사명', null=True, blank=True, max_length=10)
     image = models.ImageField(verbose_name='이미지', null=True, blank=True)
     cate = models.CharField(verbose_name='카드유형', null=True, blank=True, max_length=30)
@@ -22,13 +22,13 @@ class Card(models.Model):
     bnf1 = models.CharField(verbose_name='주요혜택1', null=True, blank=True, max_length=30)
     bnf2 = models.CharField(verbose_name='주요혜택2', null=True, blank=True, max_length=30)
     bnf3 = models.CharField(verbose_name='주요혜택3', null=True, blank=True, max_length=30)
-    link_url = models.CharField(verbose_name='상세링크', null=True, blank=True, max_length=60)
+    link_url = models.CharField(verbose_name='상세링크', null=True, blank=True, max_length=100)
 
 class Benefit(models.Model):
     id = CustomAutoField(primary_key=True)
 
     card = models.ForeignKey(to='Card', verbose_name='카드번호', on_delete=models.CASCADE, null=True, blank=True)
-    category = models.CharField(verbose_name='혜택카테고리', null=True, blank=True, max_length=5)
+    category = models.CharField(verbose_name='혜택카테고리', null=True, blank=True, max_length=15)
     category_code = models.IntegerField(verbose_name='카테고리코드', null=True, blank=True)
     content = models.CharField(verbose_name='혜택내용', null=True, blank=True, max_length=60)
 

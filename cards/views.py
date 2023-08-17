@@ -2,15 +2,13 @@ from django.shortcuts import render
 
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework import generics
-
-from django_filters.rest_framework import DjangoFilterBackend
+# from rest_framework.viewsets import ModelViewSet
+# from rest_framework import generics
 
 from datas.models import Card, Benefit
-from .serializers import CardListModelSerializer, CardDetailModelSerializer
-# from .serializers import 
+
+import random
 
 BRANDS = [
     {"id": 1,	"brand": "신한카드"},
@@ -67,6 +65,7 @@ BRANDS = [
 class SelectBrandView(APIView):
     def get(self, request):
         extra = request.GET.get('extra', False)
+
         main_brand_list = BRANDS[:12]
         extra_brand_list = BRANDS[12:]
         brand_list = main_brand_list if not extra else extra_brand_list
@@ -74,26 +73,82 @@ class SelectBrandView(APIView):
         data = {"brand_list": brand_list}
         return Response(data)
 
-# 카드 리스트 (미완성)
-class CardListView(generics.RetrieveAPIView):
-    queryset = Card.objects.all()
-    serializer_class = CardListModelSerializer
+# 카드 리스트
+class CardListView(APIView):
+    def get(self, request, pk):
+        cate = request.GET.get('cate', 'CRD')
 
-    # filter_backends = [DjangoFilterBackend]
-    # filter_fields = ['brand']
+        crd_data_list = []
+        chk_data_list = []
+        data_list = []
+        brand = BRANDS[pk-1]["brand"]
+        print(brand)
+        obj = Card.objects.filter(brand=brand).values()
+        for i in range(len(obj)):
+            instance = {"id": obj[i]["id"], "card": obj[i]["card"], "brand": obj[i]["brand"], "image": obj[i]["image"], "view_count": obj[i]["view_count"]}
+            if obj[i]["cate"] == "CRD":
+                crd_data_list.append(instance)
+            if obj[i]["cate"] == "CHK":
+                chk_data_list.append(instance)
 
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
+        crd_data_list.sort(key=lambda x : -x["view_count"])
+        chk_data_list.sort(key=lambda x : -x["view_count"])
+        data_list = chk_data_list[:10] if cate == 'CHK' else crd_data_list[:10]
 
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
+        data = {"card_list": data_list}
+        return Response(data)
 
 # 카드 상세
-class CardDetailView(generics.RetrieveAPIView):
-    queryset = Card.objects.all()
-    serializer_class = CardDetailModelSerializer
+class CardDetailView(APIView):
+    def post(self, request, pk):
+        view_count = request.GET.get('view_count')
+        card_obj = Card.objects.get(id=pk)
+        card_obj.view_count = view_count
+        card_obj.save()
+        bene_obj = Benefit.objects.filter(card_id=pk).values()
+        bene_list = []
+        for i in range(len(bene_obj)):
+            bene_instance = {"category": bene_obj[i]["category"], "category_code": bene_obj[i]["category_code"], "content": bene_obj[i]["content"]}
+            bene_list.append(bene_instance)
+
+        data = {"id": card_obj.id, "card": card_obj.card, "brand": card_obj.brand, "image": str(card_obj.image), "view_count":card_obj.view_count, "benefit_list": bene_list}
+        return Response(data)
+        
+# 분야별 순위
+class CategoryRankView(APIView):
+    def get(self, request):
+        category_code = request.GET.get('category', 3)
+        card_list = []
+        data_list = []
+        bene_obj = Benefit.objects.filter(category_code=category_code).values()
+        for i in range(len(bene_obj)):
+            card_list.append(bene_obj[i]["card_id"])
+        for n in card_list:
+            card_obj = Card.objects.get(id=n)
+            print(card_obj)
+            instane = {"id": card_obj.id, "card": card_obj.card, "brand": card_obj.brand, "image": str(card_obj.image), "view_count": card_obj.view_count}
+            data_list.append(instane)
+
+        data_list.sort(key=lambda x : -x["view_count"])
+        
+        data = {"card_list": data_list[:10]}
+        return Response(data)
+
+# 광고
+class AdvertiseView(CardDetailView):
+    def post(self, request):
+        ad_card = [121, 2441, 1487, 2330] # 광고 카드 리스트
+        id = ad_card[random.randrange(len(ad_card))]
+
+        view_count = request.GET.get('view_count')
+        card_obj = Card.objects.get(id=id)
+        card_obj.view_count = view_count
+        card_obj.save()
+        bene_obj = Benefit.objects.filter(card_id=id).values()
+        bene_list = []
+        for i in range(len(bene_obj)):
+            bene_instance = {"category": bene_obj[i]["category"], "category_code": bene_obj[i]["category_code"], "content": bene_obj[i]["content"]}
+            bene_list.append(bene_instance)
+
+        data = {"id": card_obj.id, "card": card_obj.card, "brand": card_obj.brand, "image": str(card_obj.image), "view_count":card_obj.view_count, "benefit_list": bene_list}
+        return Response(data)
