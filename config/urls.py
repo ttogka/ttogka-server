@@ -16,5 +16,5 @@ urlpatterns = [
     path('brand/<int:pk>', CardListView.as_view(), name='card-list-view'),
     path('card/<int:pk>', CardDetailView.as_view(), name='card-detail-view'),
     path('rank/', CategoryRankView.as_view(), name='category-rank-view'),
-    path('ad/', AdvertiseView.as_view(), name='advertise-view'),
+    # path('ad/', AdvertiseView.as_view(), name='advertise-view'),
 ]
