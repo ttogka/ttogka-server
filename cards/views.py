@@ -62,6 +62,8 @@ BRANDS = [
     {"id": 49,	"brand": "DB금융투자"},
 ]
 
+AD_CARD = [121, 2441, 1487, 2330] # 광고 카드 리스트
+
 class SelectBrandView(APIView):
     def get(self, request):
         extra = request.GET.get('extra', False)
@@ -81,6 +83,7 @@ class CardListView(APIView):
         crd_data_list = []
         chk_data_list = []
         data_list = []
+
         brand = BRANDS[pk-1]["brand"]
         obj = Card.objects.filter(brand=brand).values()
         for i in range(len(obj)):
@@ -94,7 +97,12 @@ class CardListView(APIView):
         chk_data_list.sort(key=lambda x : -x["view_count"])
         data_list = chk_data_list[:10] if cate == 'CHK' else crd_data_list[:10]
 
-        data = {"card_list": data_list}
+        # ad_list
+        ad_id = AD_CARD[random.randrange(len(AD_CARD))]
+        ad_card = Card.objects.get(id=ad_id)
+        ad_card = {"id": ad_id, "card": ad_card.card, "brand": ad_card.brand, "image": str(ad_card.image)}
+
+        data = {"card_list": data_list[:10], "ad_card": ad_card}
         print(f'{brand} 카드사 순위 GET 성공!')
         return Response(data)
 
@@ -127,25 +135,26 @@ class CategoryRankView(APIView):
                 card_id_list.append(bene_obj[i]["card_id"])
         for n in card_id_list:
             card_obj = Card.objects.get(id=n)
-            print(card_obj)
             instane = {"id": card_obj.id, "card": card_obj.card, "brand": card_obj.brand, "image": str(card_obj.image), "view_count": card_obj.view_count}
             data_list.append(instane)
 
         data_list.sort(key=lambda x : -x["view_count"])
         
-        data = {"card_list": data_list[:10]}
+        # ad_list
+        ad_id = AD_CARD[random.randrange(len(AD_CARD))]
+        ad_card = Card.objects.get(id=ad_id)
+        ad_card = {"id": ad_id, "card": ad_card.card, "brand": ad_card.brand, "image": str(ad_card.image)}
+
+        data = {"card_list": data_list[:10], "ad_card": ad_card}
         print(f'{category_code} 분야별 순위 GET 성공!')
         return Response(data)
 
 # 광고
 class AdvertiseView(CardDetailView):
-    def post(self, request):
-        ad_card = [121, 2441, 1487, 2330] # 광고 카드 리스트
-        id = ad_card[random.randrange(len(ad_card))]
+    def get(self, request):
+        id = AD_CARD[random.randrange(len(AD_CARD))]    
 
-        view_count = request.POST.get('view_count')
         card_obj = Card.objects.get(id=id)
-        card_obj.view_count = view_count
         card_obj.save()
         bene_obj = Benefit.objects.filter(card_id=id).values()
         bene_list = []
@@ -154,5 +163,5 @@ class AdvertiseView(CardDetailView):
             bene_list.append(bene_instance)
 
         data = {"id": card_obj.id, "card": card_obj.card, "brand": card_obj.brand, "image": str(card_obj.image), "view_count":card_obj.view_count, "benefit_list": bene_list}
-        print(f'{card_obj.id} {card_obj.card}: 광고 카드 POST 성공!')
+        print(f'{card_obj.id} {card_obj.card}: 광고 카드 GET 성공!')
         return Response(data)
