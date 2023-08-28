@@ -8,6 +8,9 @@ class CustomAutoField(models.AutoField):
         return current_max[self.attname] + 1 if current_max[self.attname] else 1
 
 class Card(models.Model):
+    class Meta:
+        app_label = 'datas'
+
     id = CustomAutoField(primary_key=True)
 
     card = models.CharField(verbose_name='카드명', null=True, blank=True, max_length=30)
@@ -25,6 +28,9 @@ class Card(models.Model):
     link_url = models.CharField(verbose_name='상세링크', null=True, blank=True, max_length=100)
 
 class Benefit(models.Model):
+    class Meta:
+        app_label = 'datas'
+        
     id = CustomAutoField(primary_key=True)
 
     card = models.ForeignKey(to='Card', verbose_name='카드번호', on_delete=models.CASCADE, null=True, blank=True)
