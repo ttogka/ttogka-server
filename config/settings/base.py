@@ -167,6 +167,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS URL로 혀용
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:8000",
-    "http://localhost:3000/brand",
+    "http://localhost:3000",
     "http://3.37.36.196/brand",
 )
