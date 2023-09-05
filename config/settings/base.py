@@ -115,11 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
@@ -162,7 +164,7 @@ CORS_ALLOW_HEADERS = [ # 허용할 헤더
 CORS_ALLOW_CREDENTIALS = True
 
 # CORS 전체 허용
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # CORS URL로 혀용
 CORS_ORIGIN_WHITELIST = (
