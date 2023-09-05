@@ -173,4 +173,4 @@ CORS_ALLOW_HEADERS = [ # 허용할 헤더
 #     "http://3.37.36.196/brand",
 # )
 
-CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
