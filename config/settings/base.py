@@ -43,6 +43,7 @@ SECRET_KEY = get_secret('SECRET_KEY')
 # Application definition
 
 DJANGO_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,14 +59,13 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # 가능한 최상단에 위치할 것
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -161,16 +161,15 @@ CORS_ALLOW_HEADERS = [ # 허용할 헤더
     "x-requested-with",
 ]
 
-# CORS_ALLOW_CREDENTIALS = True
-
-# CORS 전체 허용
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 # CORS URL로 혀용
-# CORS_ORIGIN_WHITELIST = (
+# CORS_ALLOWED_ORIGINS = (
 #     "http://localhost:8000",
-#     "http://localhost:3000/brand",
-#     "http://3.37.36.196/brand",
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     # "http://3.37.36.196/api/v1/brands",
 # )
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+# CORS 전체 허용
+CORS_ALLOW_ALL_ORIGINS = True
