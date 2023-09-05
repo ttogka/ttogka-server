@@ -12,9 +12,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('data/', include('datas.urls')),
 
-    path('brand/', SelectBrandView.as_view(), name='brand-view'),
-    path('brand/<int:pk>', CardListView.as_view(), name='card-list-view'),
-    path('card/<int:pk>', CardDetailView.as_view(), name='card-detail-view'),
-    path('rank/', CategoryRankView.as_view(), name='category-rank-view'),
+    path('/api/v1/brands/', SelectBrandView.as_view(), name='brand-view'),
+    path('/api/v1/brands/<int:pk>', CardListView.as_view(), name='card-list-view'),
+    path('/api/v1/cards/<int:pk>', CardDetailView.as_view(), name='card-detail-view'),
+    path('/api/v1/ranks/', CategoryRankView.as_view(), name='category-rank-view'),
     # path('ad/', AdvertiseView.as_view(), name='advertise-view'),
 ]
