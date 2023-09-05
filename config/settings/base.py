@@ -58,6 +58,7 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -162,3 +163,10 @@ CORS_ALLOW_CREDENTIALS = True
 
 # CORS 전체 허용
 CORS_ALLOW_ALL_ORIGINS: True
+
+# CORS URL로 혀용
+CORS_ORIGIN_WHITELIST = (
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "http://3.37.36.196/brand",
+)
