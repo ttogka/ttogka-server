@@ -140,6 +140,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
+############ CORS #############
+
 CORS_ALLOW_METHODS = [  # 허용할 옵션
     "DELETE",
     "GET",
@@ -164,12 +166,27 @@ CORS_ALLOW_HEADERS = [ # 허용할 헤더
 CORS_ALLOW_CREDENTIALS = True
 
 # CORS URL로 혀용
-# CORS_ALLOWED_ORIGINS = (
-#     "http://localhost:8000",
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-#     # "http://3.37.36.196/api/v1/brands",
-# )
+CORS_ALLOWED_ORIGINS = (
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "0.0.0.0:3000",
+)
 
-# CORS 전체 허용
+# # CORS 전체 허용
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ORIGIN_WHITELIST = (
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "0.0.0.0:3000",
+)
+
+# *로 만들기
+# 배포 주소로도
+# 같은 와이파이로
+# 화이트리스트도
+
+# CORS_ORIGIN_WHITELIST = ['http://3.37.36.196']
+# CORS_ALLOW_CREDENTIALS = True
