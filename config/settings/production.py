@@ -1,10 +1,22 @@
 from .base import *
 
+from environ import Env
+
+import os
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SERVER_IP = env('SERVER_IP')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
-# 3.37.36.196
+ALLOWED_HOSTS = [SERVER_IP]
 
 # Database  
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -12,7 +24,7 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'ttokaDB' / 'db.sqlite3',
     }
 }
 
